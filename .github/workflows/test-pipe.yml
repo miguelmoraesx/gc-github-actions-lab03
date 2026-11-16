@@ -1,0 +1,33 @@
+name: Lab 03 - Exercício 01 - Test Pipe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'exercise-01/**'
+      - '.github/workflows/test-pipe.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+    defaults:
+      run:
+        working-directory: exercise-01
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run the tests
+        run: npm test -- --coverage
+      - name: Registre a execução
+        run: sleep 30
+
