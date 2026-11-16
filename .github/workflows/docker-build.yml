@@ -16,12 +16,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build Docker image
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and publish Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./exercise-02
-          push: false
-          tags: webacademy:latest
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/gc-github-actions-lab03:latest
       - name: Registre a execução
         run: sleep 30
   deploy:
